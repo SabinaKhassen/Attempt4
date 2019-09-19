@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@Html.ActionLink("Create book", "Edit")
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Author</th>
+            <th scope="col">Title</th>
+            <th scope="col">Pages</th>
+            <th scope="col">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Books)
+            {
+            <tr>
+                <td scope="row">@ViewBag.Authors.Find(item.AuthorId)</td>
+                <td scope="row">@item.Title</td>
+                <td scope="row">@item.Pages</td>
+                <td scope="row">@item.Price</td>
+                <td scope="row">@Html.ActionLink("Edit book", "Edit", "Book", new { id = @item.Id }, null)</td>
+                <td scope="row">@Html.ActionLink("Delete book", "Delete", "Book", new { id = @item.Id }, null)</td>
+            </tr>
+        }
+</table>
