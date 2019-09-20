@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Index";
+    List<Attempt4.ViewModels.UserViewModel> users = ViewBag.Users;
+    List<Attempt4.ViewModels.BookViewModel> books = ViewBag.Books;
+}
+
+@Html.ActionLink("Create order", "Edit")
+
+<h2>Orders</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">User</th>
+            <th scope="col">Book</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Orders)
+        {
+            string user = users.Where(u => u.Id == item.UserId).First().FIO;
+            string book = books.Where(b => b.Id == item.BookId).First().Title;
+            <tr>
+                <td scope="row">@user</td>
+                <td scope="row">@book</td>
+                <td scope="row">@Html.ActionLink("Edit order", "Edit", "Order", new { id = @item.Id }, null)</td>
+                <td scope="row">@Html.ActionLink("Delete order", "Delete", "Order", new { id = @item.Id }, null)</td>
+            </tr>
+        }
+</table>

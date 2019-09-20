@@ -48,6 +48,32 @@ namespace WebApplication2.App_Start
 
                 cfg.CreateMap<BookBO, Books>()
                 .ConstructUsing(item => DependencyResolver.Current.GetService<Books>());
+
+
+                cfg.CreateMap<Users, UserBO>()//.ForMember(t=> t.Id, to => to.Ignore())
+                .ConstructUsing(item => DependencyResolver.Current.GetService<UserBO>());
+
+                cfg.CreateMap<UserBO, UserViewModel>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<UserViewModel>());
+
+                cfg.CreateMap<UserViewModel, UserBO>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<UserBO>());
+
+                cfg.CreateMap<UserBO, Users>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<Users>());
+
+
+                cfg.CreateMap<Orders, OrderBO>()//.ForMember(t=> t.Id, to => to.Ignore())
+                .ConstructUsing(item => DependencyResolver.Current.GetService<OrderBO>());
+
+                cfg.CreateMap<OrderBO, OrderViewModel>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<OrderViewModel>());
+
+                cfg.CreateMap<OrderViewModel, OrderBO>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<OrderBO>());
+
+                cfg.CreateMap<OrderBO, Orders>()
+                .ConstructUsing(item => DependencyResolver.Current.GetService<Orders>());
             }
             );
         }

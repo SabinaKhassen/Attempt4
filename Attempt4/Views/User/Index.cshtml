@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+@Html.ActionLink("Create user", "Edit")
+
+<h2>Users</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">FIO</th>
+            <th scope="col">Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Users)
+            {
+            <tr>
+                <td scope="row">@item.FIO</td>
+                <td scope="row">@item.Email</td>
+                <td scope="row">@Html.ActionLink("Edit user", "Edit", "User", new { id = @item.Id }, null)</td>
+                <td scope="row">@Html.ActionLink("Delete user", "Delete", "User", new { id = @item.Id }, null)</td>
+            </tr>
+        }
+</table>

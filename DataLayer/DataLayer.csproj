@@ -55,6 +55,21 @@
     <Compile Include="Entities\Authors.cs" />
     <Compile Include="Entities\Books.cs" />
     <Compile Include="Entities\Model1.cs" />
+    <Compile Include="Entities\Orders.cs" />
+    <Compile Include="Entities\Users.cs" />
+    <Compile Include="Migrations\201909201357565_FirstMigration.cs" />
+    <Compile Include="Migrations\201909201357565_FirstMigration.Designer.cs">
+      <DependentUpon>201909201357565_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909201400130_UserEntities.cs" />
+    <Compile Include="Migrations\201909201400130_UserEntities.Designer.cs">
+      <DependentUpon>201909201400130_UserEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909201402264_OrdersEntities.cs" />
+    <Compile Include="Migrations\201909201402264_OrdersEntities.Designer.cs">
+      <DependentUpon>201909201402264_OrdersEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
@@ -64,6 +79,17 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201909201357565_FirstMigration.resx">
+      <DependentUpon>201909201357565_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909201400130_UserEntities.resx">
+      <DependentUpon>201909201400130_UserEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909201402264_OrdersEntities.resx">
+      <DependentUpon>201909201402264_OrdersEntities.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

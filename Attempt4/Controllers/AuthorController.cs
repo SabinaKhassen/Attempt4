@@ -74,6 +74,7 @@ namespace Attempt4.Controllers
         {
             var authorBO = DependencyResolver.Current.GetService<AuthorBO>();
             var model = mapper.Map<AuthorViewModel>(authorBO);
+
             if (id != null)
             {
                 var authorBOList = authorBO.GetAuthorsListById(id);
@@ -81,6 +82,7 @@ namespace Attempt4.Controllers
                 ViewBag.Message = "Edit";
             }
             else ViewBag.Message = "Create";
+
             return View(model);
         }
 
