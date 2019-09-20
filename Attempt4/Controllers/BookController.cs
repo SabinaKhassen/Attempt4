@@ -33,10 +33,9 @@ namespace Attempt4.Controllers
         public ActionResult Edit(int? id)
         {
             var bookBO = DependencyResolver.Current.GetService<BookBO>();
-            var authorList = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
-            SelectList authors = new SelectList(authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "AuthorId", "LastName");
-            ViewBag.Authors = authors;
+            var authors = DependencyResolver.Current.GetService<AuthorBO>();
             var model = mapper.Map<BookViewModel>(bookBO);
+
             if (id != null)
             {
                 var bookBOList = bookBO.GetBooksListById(id);
@@ -44,6 +43,9 @@ namespace Attempt4.Controllers
                 ViewBag.Message = "Edit";
             }
             else ViewBag.Message = "Create";
+
+            ViewBag.Authors = new SelectList(authors.GetAuthorsList().Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "Id", "LastName");
+
             return View(model);
         }
 

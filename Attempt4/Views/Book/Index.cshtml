@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Index";
+    List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
 }
 
 @Html.ActionLink("Create book", "Edit")
@@ -15,9 +16,10 @@
     </thead>
     <tbody>
         @foreach (var item in ViewBag.Books)
-            {
+        {
+            string author = authors.Where(a => a.Id == item.AuthorId).First().FirstName + " " + authors.Where(a => a.Id == item.AuthorId).First().LastName;
             <tr>
-                <td scope="row">@ViewBag.Authors.Find(item.AuthorId)</td>
+                <td scope="row">@author</td>
                 <td scope="row">@item.Title</td>
                 <td scope="row">@item.Pages</td>
                 <td scope="row">@item.Price</td>
