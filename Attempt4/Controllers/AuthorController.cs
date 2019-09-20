@@ -52,6 +52,20 @@ namespace Attempt4.Controllers
             var authorBO = DependencyResolver.Current.GetService<AuthorBO>();
             var authorList = authorBO.GetAuthorsList();
             ViewBag.Authors = authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+
+            List<AuthorViewModel> authorsTop = new List<AuthorViewModel>();
+            BookBO books = DependencyResolver.Current.GetService<BookBO>();
+            var expensiveBooks = books.GetBooksList().Select(item => mapper.Map<BookViewModel>(item))
+                                .OrderByDescending(b => b.Price).ToList();
+            //expensiveBooks.ForEach(x => authorsTop.Add(db.Authors.Where(a => a.Id == x).FirstOrDefault()));
+            foreach (var item in expensiveBooks)
+            {
+                authorsTop.Add(authorList.Select(a => mapper.Map<AuthorViewModel>(a))
+                    .Where(a => a.Id == item.AuthorId).FirstOrDefault());
+            }
+            ViewBag.Authors = authorList.Select(item => mapper.Map<AuthorViewModel>(item)).ToList();
+            ViewBag.AuthorsTop = authorsTop.Distinct().Take(5);
+
             return View();
         }
 
@@ -90,6 +104,18 @@ namespace Attempt4.Controllers
             author.Delete(id);
 
             return RedirectToActionPermanent("Index", "Author");
+        }
+
+        public ActionResult _MyPartialView()
+        {
+            var books = DependencyResolver.Current.GetService<BookBO>();
+            var authors = DependencyResolver.Current.GetService<AuthorBO>();
+            var expensiveBooks = books.GetBooksList().Select(item => mapper.Map<BookViewModel>(item))
+                                .OrderByDescending(b => b.Price).ToList();
+            ViewBag.ExpBooks = expensiveBooks;
+            ViewBag.Authors = authors.GetAuthorsList();
+
+            return PartialView();
         }
     }
 }

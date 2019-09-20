@@ -4,6 +4,10 @@
 
 @Html.ActionLink("Create author", "Edit")
 
+@Html.Partial("Partial/_MyPartialView", @ViewBag.AuthorsTop as List<Attempt4.ViewModels.AuthorViewModel>)
+
+<h2>Authors</h2>
+
 <table class="table table-striped">
     <thead>
         <tr>
