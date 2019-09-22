@@ -62,5 +62,19 @@ namespace Attempt4.Controllers
 
             return RedirectToActionPermanent("Index", "User");
         }
+
+        public ActionResult _UsersOrders(int id)
+        {
+            var orders = DependencyResolver.Current.GetService<OrderBO>();
+            var userOrders = orders.GetOrdersList().Where(o => o.UserId == id).ToList();
+            var books = DependencyResolver.Current.GetService<BookBO>().GetBooksList();
+            var authors = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+
+            ViewBag.TopOrders = userOrders.Select(m => mapper.Map<OrderViewModel>(m)).ToList().Distinct().Take(5);
+            ViewBag.Books = books.Select(m => mapper.Map<BookViewModel>(m)).ToList();
+            ViewBag.Authors = authors.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+
+            return PartialView();
+        }
     }
 }

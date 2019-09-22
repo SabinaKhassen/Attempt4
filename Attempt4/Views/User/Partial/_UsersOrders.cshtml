@@ -1,0 +1,34 @@
+﻿@{ 
+    List<Attempt4.ViewModels.BookViewModel> books = ViewBag.Books;
+    List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
+}
+
+<h2 id="#headerOrders"></h2>
+
+<table class="table table-stripped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Pages</th>
+            <th scope="col">Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.TopOrders)
+        {
+            Attempt4.ViewModels.BookViewModel book = books.Where(b => b.Id == item.BookId).FirstOrDefault();
+            Attempt4.ViewModels.AuthorViewModel author = authors.Where(a => a.Id == book.AuthorId).FirstOrDefault();
+            string title = book.Title;
+            string authorName = author.FirstName + " " + author.LastName;
+            int pages = (int)book.Pages;
+            int price = (int)book.Price;
+            <tr>
+                <td scope="row">@title</td>
+                <td scope="row">@authorName</td>
+                <td scope="row">@pages</td>
+                <td scope="row">@price</td>
+            </tr>
+        }
+    </tbody>
+</table>
