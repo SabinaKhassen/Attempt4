@@ -74,7 +74,7 @@ namespace Attempt4.Controllers
             ViewBag.Books = books.Select(m => mapper.Map<BookViewModel>(m)).ToList();
             ViewBag.Authors = authors.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
 
-            return PartialView();
+            return PartialView("Partial/_UsersOrders");
         }
     }
 }

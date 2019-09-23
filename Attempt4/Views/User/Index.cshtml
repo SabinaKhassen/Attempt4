@@ -20,7 +20,7 @@
                 <td scope="row">@item.FIO</td>
                 <td scope="row">@item.Email</td>
                 <td scope="row">
-                    <a onclick="UserOrders()">User's orders</a>
+                    @*<a onclick="UserOrders()">User's orders</a>
                     <script type="text/javascript">
                         function UserOrders() {
                             var url = '@Url.Action("_UsersOrders")';
@@ -34,12 +34,15 @@
                                 success: function (data) {
                                     id = data;
                                 }
-                            });*@
+                            });
                         }
-                    </script>
+                    </script>*@
+                    @Ajax.ActionLink("User's orders", "_UsersOrders", new { id = @item.Id }, new AjaxOptions { UpdateTargetId = "orders" }) 
                 </td>
                 <td scope="row">@Html.ActionLink("Edit user", "Edit", "User", new { id = @item.Id }, null)</td>
                 <td scope="row">@Html.ActionLink("Delete user", "Delete", "User", new { id = @item.Id }, null)</td>
             </tr>
         }
 </table>
+
+<div id="orders"></div>

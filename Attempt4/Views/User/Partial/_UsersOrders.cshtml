@@ -1,9 +1,8 @@
-﻿@{ 
+﻿@*@model List<Attempt4.ViewModels.OrderViewModel>*@
+@{ 
     List<Attempt4.ViewModels.BookViewModel> books = ViewBag.Books;
     List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
 }
-
-<h2 id="#headerOrders"></h2>
 
 <table class="table table-stripped">
     <thead class="thead-dark">
@@ -32,3 +31,7 @@
         }
     </tbody>
 </table>
+
+<div>
+    <a href="#" onclick="$('#orders').html('')">Close</a>
+</div>
