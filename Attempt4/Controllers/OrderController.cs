@@ -3,7 +3,10 @@ using AutoMapper;
 using BussinessLayer.BussinessObjects;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -60,10 +63,24 @@ namespace Attempt4.Controllers
         public ActionResult Edit(OrderViewModel model)
         {
             var orderBO = mapper.Map<OrderBO>(model);
-            orderBO.CreationDate = DateTime.Today;
-            orderBO.Deadline = DateTime.Today;
-            orderBO.ReturnDate = DateTime.Today;
-            orderBO.Save();
+            if (model.Id == 0)
+            {
+                var allow = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).Where(o => o.UserId == model.UserId).ToList();
+                var list = allow.Where(a => a.Deadline < DateTime.Today && a.CreationDate == a.ReturnDate).ToList();
+
+                if (list.Count == 0)
+                {
+                    orderBO.CreationDate = DateTime.Today;
+                    if (model.ReturnDate == null) orderBO.ReturnDate = DateTime.Today;
+                    orderBO.Save();
+                }
+            }
+            else
+            {
+                orderBO.CreationDate = DateTime.Today;
+                if (model.ReturnDate == null) orderBO.ReturnDate = DateTime.Today;
+                orderBO.Save();
+            }
 
             return RedirectToActionPermanent("Index", "Order");
         }
@@ -76,5 +93,75 @@ namespace Attempt4.Controllers
 
             return RedirectToActionPermanent("Index", "Order");
         }
+
+        public ActionResult SendEmail(int id)
+        {
+            var orderBO = DependencyResolver.Current.GetService<OrderBO>().GetOrdersListById(id);
+            var order = mapper.Map<OrderViewModel>(orderBO);
+            var bookBO = DependencyResolver.Current.GetService<BookBO>().GetBooksListById(order.BookId);
+            var titleBook = mapper.Map<BookViewModel>(bookBO);
+            var userBO = DependencyResolver.Current.GetService<UserBO>().GetUsersListById(order.UserId);
+            var userMail = mapper.Map<UserViewModel>(userBO);
+
+            MailAddress from = new MailAddress("sabina.khasen@gmail.com", "Sabina");
+            MailAddress to = new MailAddress(userMail.Email);
+            MailMessage message = new MailMessage(from, to);
+            message.Subject = "Return '" + titleBook.Title + "'";
+            message.Body = string.Format("Your order was due to " + order.Deadline + ". Return the book!");
+            message.IsBodyHtml = false;
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential("sabina.khasen@gmail.com", "asgbdn19737577");
+            smtp.EnableSsl = true;
+            smtp.Send(message);
+
+            return RedirectToActionPermanent("Index", "Order");
+        }
+
+        public ActionResult FileDeadline()
+        {
+            List<OrderViewModel> deadlines = new List<OrderViewModel>();
+
+            var orderBO = DependencyResolver.Current.GetService<OrderBO>().GetOrdersList();
+            var userBO = DependencyResolver.Current.GetService<UserBO>();
+
+            deadlines = orderBO.Select(m => mapper.Map<OrderViewModel>(m)).Where(o => o.CreationDate == o.ReturnDate && DateTime.Today > o.Deadline).ToList();
+            string path = @"C:\Test\deadline.txt";
+
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.Unicode))
+                {
+                    foreach (var item in deadlines)
+                    {
+                        var user = mapper.Map<UserViewModel>(userBO.GetUsersListById(item.UserId));
+                        string fio = user.FIO;
+                        sw.WriteLine($"User: {fio}   CreationDate: {item.CreationDate}  Deadline: {item.Deadline}");
+                    }
+                }
+            }
+
+            #region MemoryStream
+            //    //byte[] data = new byte[5000];
+            //    //MemoryStream ms = new MemoryStream(data);
+            //    //StreamWriter sw = new StreamWriter(ms);
+
+            //    //foreach (var item in links)
+            //    //    if (item.Deadline < DateTime.Now)
+            //    //    {
+            //    //        string fio = db.Users.Where(u => u.Id == item.UserId).FirstOrDefault().FIO;
+            //    //        sw.WriteLine($"User: {fio}   CreationDate: {item.CreationDate}  Deadline: {item.Deadline}");
+            //    //    }
+            //    //sw.Flush();
+            //    //sw.Close();
+            //    ////sr.Close();
+            //    //string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //    //FileStream file = new FileStream($@"{dir}\test.txt", FileMode.OpenOrCreate);
+            //    //ms.CopyTo(file);
+            //    ////return File(ms, "text/plain");
+            #endregion
+
+            return RedirectToActionPermanent("Index", "Order");
+        }
+
     }
 }

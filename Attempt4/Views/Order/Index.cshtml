@@ -8,11 +8,18 @@
 
 <h2>Orders</h2>
 
+<div style="display:inline-block; margin-left:50px;">
+    @Html.ActionLink("Get list of deadlines", "FileDeadline")
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">User</th>
             <th scope="col">Book</th>
+            <th scope="col">Creation date</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Return date</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +30,16 @@
             <tr>
                 <td scope="row">@user</td>
                 <td scope="row">@book</td>
+                <td scope="row">@item.CreationDate</td>
+                <td scope="row">@item.Deadline</td>
+                @if (@item.ReturnDate != @item.CreationDate)
+                {
+                    <td scope="row">@item.ReturnDate</td>
+                }
+                else
+                {
+                    <td scope="row">@Html.ActionLink("Send notification", "SendEmail", "Order", new { id = @item.Id }, null)</td>
+                }
                 <td scope="row">@Html.ActionLink("Edit order", "Edit", "Order", new { id = @item.Id }, null)</td>
                 <td scope="row">@Html.ActionLink("Delete order", "Delete", "Order", new { id = @item.Id }, null)</td>
             </tr>

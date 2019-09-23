@@ -54,6 +54,7 @@
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Entities\Authors.cs" />
     <Compile Include="Entities\Books.cs" />
+    <Compile Include="Entities\Genres.cs" />
     <Compile Include="Entities\Model1.cs" />
     <Compile Include="Entities\Orders.cs" />
     <Compile Include="Entities\Users.cs" />
@@ -68,6 +69,14 @@
     <Compile Include="Migrations\201909201402264_OrdersEntities.cs" />
     <Compile Include="Migrations\201909201402264_OrdersEntities.Designer.cs">
       <DependentUpon>201909201402264_OrdersEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909231452316_GenreEntities.cs" />
+    <Compile Include="Migrations\201909231452316_GenreEntities.Designer.cs">
+      <DependentUpon>201909231452316_GenreEntities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909231503116_ImagesBooks.cs" />
+    <Compile Include="Migrations\201909231503116_ImagesBooks.Designer.cs">
+      <DependentUpon>201909231503116_ImagesBooks.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,6 +98,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909201402264_OrdersEntities.resx">
       <DependentUpon>201909201402264_OrdersEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909231452316_GenreEntities.resx">
+      <DependentUpon>201909231452316_GenreEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909231503116_ImagesBooks.resx">
+      <DependentUpon>201909231503116_ImagesBooks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -64,6 +64,7 @@
     <Compile Include="BussinessObjectBase.cs" />
     <Compile Include="BussinessObjects\AuthorBO.cs" />
     <Compile Include="BussinessObjects\BookBO.cs" />
+    <Compile Include="BussinessObjects\GenreBO.cs" />
     <Compile Include="BussinessObjects\OrderBO.cs" />
     <Compile Include="BussinessObjects\UserBO.cs" />
     <Compile Include="Class1.cs" />

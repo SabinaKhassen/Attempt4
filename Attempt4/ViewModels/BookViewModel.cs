@@ -12,5 +12,7 @@ namespace Attempt4.ViewModels
         public string Title { get; set; }
         public int? Pages { get; set; }
         public int? Price { get; set; }
+        public int GenreId { get; set; }
+        public byte[] ImageData { get; set; }
     }
 }

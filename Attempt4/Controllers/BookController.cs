@@ -58,6 +58,15 @@ namespace Attempt4.Controllers
             //{
             bookBO.Save();
             return RedirectToActionPermanent("Index", "Book");
+
+            //// массив для хранения бинарных данных файла
+            //byte[] imageData;
+            //using (System.IO.FileStream fs = new System.IO.FileStream(filename, FileMode.Open))
+            //{
+            //    imageData = new byte[fs.Length];
+            //    fs.Read(imageData, 0, imageData.Length);
+            //}
+
             //}
             //else return View(model);
         }

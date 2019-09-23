@@ -20,6 +20,14 @@ namespace DataLayer.Entities
 
         public int? Price { get; set; }
 
+        [Required]
+        [Display(Name = "Genres")]
+        public virtual int GenreId { get; set; }
+        [ForeignKey("GenreId")]
+        public virtual Genres Genres { get; set; }
+
+        public byte[] ImageData { get; set; }
+
         public virtual Authors Authors { get; set; }
     }
 }
