@@ -3,6 +3,7 @@ using AutoMapper;
 using BussinessLayer.BussinessObjects;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -24,8 +25,12 @@ namespace Attempt4.Controllers
             var bookBO = DependencyResolver.Current.GetService<BookBO>();
             var bookList = bookBO.GetBooksList();
             var authorList = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+            var genreList = DependencyResolver.Current.GetService<GenreBO>().GetGenresList();
+
             ViewBag.Books = bookList.Select(m => mapper.Map<BookViewModel>(m)).ToList();
             ViewBag.Authors = authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+            ViewBag.Genres = genreList.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
+
             return View();
         }
 
@@ -34,6 +39,7 @@ namespace Attempt4.Controllers
         {
             var bookBO = DependencyResolver.Current.GetService<BookBO>();
             var authors = DependencyResolver.Current.GetService<AuthorBO>();
+            var genres = DependencyResolver.Current.GetService<GenreBO>();
             var model = mapper.Map<BookViewModel>(bookBO);
 
             if (id != null)
@@ -45,18 +51,31 @@ namespace Attempt4.Controllers
             else ViewBag.Message = "Create";
 
             ViewBag.Authors = new SelectList(authors.GetAuthorsList().Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "Id", "LastName");
+            ViewBag.Genres = new SelectList(genres.GetGenresList().Select(m => mapper.Map<GenreViewModel>(m)).ToList(), "Id", "Name");
 
             return View(model);
         }
 
         // POST: Book/Edit/5
         [HttpPost]
-        public ActionResult Edit(BookViewModel model)
+        public ActionResult Edit(BookViewModel model, HttpPostedFileBase upload)
         {
             var bookBO = mapper.Map<BookBO>(model);
-            //if (ModelState.IsValid)
-            //{
+
+            if (ModelState.IsValid && upload != null)
+            {
+                byte[] imageData = null;
+                // считываем переданный файл в массив байтов
+                using (var binaryReader = new BinaryReader(upload.InputStream))
+                {
+                    imageData = binaryReader.ReadBytes(upload.ContentLength);
+                }
+                // установка массива байтов
+                bookBO.ImageData = imageData;
+            }
+
             bookBO.Save();
+
             return RedirectToActionPermanent("Index", "Book");
 
             //// массив для хранения бинарных данных файла
@@ -79,5 +98,20 @@ namespace Attempt4.Controllers
 
             return RedirectToActionPermanent("Index", "Book");
         }
+
+        //[HttpPost]
+        //public ActionResult Upload(HttpPostedFileBase upload)
+        //{
+        //    if (upload != null)
+        //    {
+        //        // получаем имя файла
+        //        string fileName = System.IO.Path.GetFileName(upload.FileName);
+        //        // сохраняем файл в папку Files в проекте
+        //        //upload.SaveAs(Server.MapPath("~/Files/" + fileName));
+        //        image = new byte[upload.ContentLength];
+        //        upload.InputStream.Read(image, 0, upload.ContentLength);
+        //    }
+        //    return RedirectToActionPermanent("Edit", "Book");
+        //}
     }
 }

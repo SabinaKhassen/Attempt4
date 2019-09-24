@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.ActionLink("Create genre", "Edit")
+
+<h2>Genres</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Genres)
+            {
+            <tr>
+                <td scope="row">@item.Name</td>
+                <td scope="row">@Html.ActionLink("Edit genre", "Edit", "Genre", new { id = @item.Id }, null)</td>
+                <td scope="row">@Html.ActionLink("Delete genre", "Delete", "Genre", new { id = @item.Id }, null)</td>
+            </tr>
+        }
+</table>

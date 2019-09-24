@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Index";
     List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
+    List<Attempt4.ViewModels.GenreViewModel> genres = ViewBag.Genres;
 }
 
 @Html.ActionLink("Create book", "Edit")
@@ -14,17 +15,23 @@
             <th scope="col">Title</th>
             <th scope="col">Pages</th>
             <th scope="col">Price</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Image</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in ViewBag.Books)
         {
             string author = authors.Where(a => a.Id == item.AuthorId).First().FirstName + " " + authors.Where(a => a.Id == item.AuthorId).First().LastName;
+            string genre = genres.Where(g => g.Id == item.GenreId).First().Name;
             <tr>
                 <td scope="row">@author</td>
                 <td scope="row">@item.Title</td>
                 <td scope="row">@item.Pages</td>
                 <td scope="row">@item.Price</td>
+                <td scope="row">@genre</td>
+                <td scope="row">@Html.Raw("<img style='width:60px; height:60px;' src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(item.ImageData) + "\" />")</td>
                 <td scope="row">@Html.ActionLink("Edit book", "Edit", "Book", new { id = @item.Id }, null)</td>
                 <td scope="row">@Html.ActionLink("Delete book", "Delete", "Book", new { id = @item.Id }, null)</td>
             </tr>

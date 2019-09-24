@@ -22,15 +22,30 @@ namespace Attempt4.Controllers
             this.mapper = mapper;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string sort)
         {
             var orderBO = DependencyResolver.Current.GetService<OrderBO>();
             var userBO = DependencyResolver.Current.GetService<UserBO>();
             var bookBO = DependencyResolver.Current.GetService<BookBO>();
 
-            ViewBag.Orders = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).ToList();
             ViewBag.Users = userBO.GetUsersList().Select(m => mapper.Map<UserViewModel>(m)).ToList();
             ViewBag.Books = bookBO.GetBooksList().Select(m => mapper.Map<BookViewModel>(m)).ToList();
+
+            if (Request.IsAjaxRequest())
+            {
+                if (sort == "Creation Date")
+                {
+                    var orders = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).ToList();
+                    ViewBag.Orders = orders.OrderBy(o => o.CreationDate);
+                }
+                else if (sort == "None")
+                    ViewBag.Orders = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).ToList();
+                return PartialView("Partial/OrderPartialView");
+            }
+            else
+            {
+                ViewBag.Orders = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).ToList();
+            }
 
             return View();
         }
@@ -71,14 +86,13 @@ namespace Attempt4.Controllers
                 if (list.Count == 0)
                 {
                     orderBO.CreationDate = DateTime.Today;
-                    if (model.ReturnDate == null) orderBO.ReturnDate = DateTime.Today;
+                    if (model.ReturnDate == null) orderBO.ReturnDate = orderBO.CreationDate;
                     orderBO.Save();
                 }
             }
             else
             {
-                orderBO.CreationDate = DateTime.Today;
-                if (model.ReturnDate == null) orderBO.ReturnDate = DateTime.Today;
+                if (model.ReturnDate == null) orderBO.ReturnDate = orderBO.CreationDate;
                 orderBO.Save();
             }
 
