@@ -54,7 +54,8 @@
             @Html.LabelFor(model => model.GenreId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.AuthorId, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(model => model.GenreId, ViewBag.Genres as SelectList, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.DropDownListFor(model => model.GenreId, ViewBag.Genres as SelectList, new { htmlAttributes = new { @class = "form-control" } })*@
+                <select id="genreList" class="form-control"></select>
                 @Html.ValidationMessageFor(model => model.GenreId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -79,3 +80,21 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    $.ajax({
+        url: '@Url.Action("GenreDropDown")',
+        type: 'GET',
+        data: '{}',
+        success: function (data) {
+            var s = '';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].Name + '</option>';
+            }
+            $("#genreList").html(s);
+        }
+    })
+
+
+</script>

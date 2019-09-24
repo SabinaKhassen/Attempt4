@@ -51,7 +51,7 @@ namespace Attempt4.Controllers
             else ViewBag.Message = "Create";
 
             ViewBag.Authors = new SelectList(authors.GetAuthorsList().Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "Id", "LastName");
-            ViewBag.Genres = new SelectList(genres.GetGenresList().Select(m => mapper.Map<GenreViewModel>(m)).ToList(), "Id", "Name");
+            //ViewBag.Genres = new SelectList(genres.GetGenresList().Select(m => mapper.Map<GenreViewModel>(m)).ToList(), "Id", "Name");
 
             return View(model);
         }
@@ -60,6 +60,7 @@ namespace Attempt4.Controllers
         [HttpPost]
         public ActionResult Edit(BookViewModel model, HttpPostedFileBase upload)
         {
+            string str = "test";
             var bookBO = mapper.Map<BookBO>(model);
 
             if (ModelState.IsValid && upload != null)
@@ -72,6 +73,10 @@ namespace Attempt4.Controllers
                 }
                 // установка массива байтов
                 bookBO.ImageData = imageData;
+            }
+            else
+            {
+                bookBO.ImageData = new byte[str.Length];
             }
 
             bookBO.Save();
@@ -99,19 +104,12 @@ namespace Attempt4.Controllers
             return RedirectToActionPermanent("Index", "Book");
         }
 
-        //[HttpPost]
-        //public ActionResult Upload(HttpPostedFileBase upload)
-        //{
-        //    if (upload != null)
-        //    {
-        //        // получаем имя файла
-        //        string fileName = System.IO.Path.GetFileName(upload.FileName);
-        //        // сохраняем файл в папку Files в проекте
-        //        //upload.SaveAs(Server.MapPath("~/Files/" + fileName));
-        //        image = new byte[upload.ContentLength];
-        //        upload.InputStream.Read(image, 0, upload.ContentLength);
-        //    }
-        //    return RedirectToActionPermanent("Edit", "Book");
-        //}
+        [HttpGet]
+        public ActionResult GenreDropDown()
+        {
+            var genreBO = DependencyResolver.Current.GetService<GenreBO>().GetGenresList();
+            var genreList = genreBO.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
+            return Json(genreList.Select(g => new { g.Id, g.Name }).ToList(), JsonRequestBehavior.AllowGet);
+        }
     }
 }
