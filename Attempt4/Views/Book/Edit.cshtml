@@ -55,7 +55,7 @@
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.AuthorId, new { htmlAttributes = new { @class = "form-control" } })*@
                 @*@Html.DropDownListFor(model => model.GenreId, ViewBag.Genres as SelectList, new { htmlAttributes = new { @class = "form-control" } })*@
-                <select id="genreList" class="form-control"></select>
+                <select id="genreList" name="genre" class="form-control"></select>
                 @Html.ValidationMessageFor(model => model.GenreId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -86,7 +86,9 @@
     $.ajax({
         url: '@Url.Action("GenreDropDown")',
         type: 'GET',
-        data: '{}',
+        data: {
+            //genre: $("#genreList").val()
+        },
         success: function (data) {
             var s = '';
             for (var i = 0; i < data.length; i++) {
@@ -95,6 +97,4 @@
             $("#genreList").html(s);
         }
     })
-
-
 </script>
