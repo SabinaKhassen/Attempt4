@@ -263,6 +263,8 @@
     <Content Include="Views\Genre\Index.cshtml" />
     <Content Include="Views\Genre\Edit.cshtml" />
     <Content Include="Views\Order\Partial\OrderPartialView.cshtml" />
+    <Content Include="Views\Author\Partial\AuthorPartialView.cshtml" />
+    <Content Include="Views\Author\Partial\EditPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

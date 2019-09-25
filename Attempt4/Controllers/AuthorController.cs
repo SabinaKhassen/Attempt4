@@ -63,8 +63,12 @@ namespace Attempt4.Controllers
                 authorsTop.Add(authorList.Select(a => mapper.Map<AuthorViewModel>(a))
                     .Where(a => a.Id == item.AuthorId).FirstOrDefault());
             }
-            ViewBag.Authors = authorList.Select(item => mapper.Map<AuthorViewModel>(item)).ToList();
             ViewBag.AuthorsTop = authorsTop.Distinct().Take(5);
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Partial/AuthorPartialView", ViewBag.Authors);
+            }
 
             return View();
         }
@@ -83,6 +87,11 @@ namespace Attempt4.Controllers
             }
             else ViewBag.Message = "Create";
 
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Partial/EditPartialView", model);
+            }
+
             return View(model);
         }
 
@@ -94,6 +103,14 @@ namespace Attempt4.Controllers
             //if (ModelState.IsValid)
             //{
                 authorBO.Save();
+            var authors = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+
+            if (Request.IsAjaxRequest())
+            {
+
+                return PartialView("Partial/AuthorPartialView", authors.Select(m => mapper.Map<AuthorViewModel>(m)).ToList());
+            }
+
             return RedirectToActionPermanent("Index", "Author");
             //}
             //else return View(model);
@@ -104,6 +121,11 @@ namespace Attempt4.Controllers
         {
             var author = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsListById(id);
             author.Delete(id);
+            var authorBO = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Partial/AuthorPartialView", authorBO.Select(m => mapper.Map<AuthorViewModel>(m)).ToList());
+            }
 
             return RedirectToActionPermanent("Index", "Author");
         }
