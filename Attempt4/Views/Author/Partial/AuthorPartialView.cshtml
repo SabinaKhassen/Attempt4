@@ -13,9 +13,11 @@
             <tr>
                 <td scope="row">@item.FirstName</td>
                 <td scope="row">@item.LastName</td>
-                <td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "createOrEdit" })</td>
+                @*<td scope="row">@Html.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }@*, new AjaxOptions() { UpdateTargetId = "createOrEdit" }, new { htmlAttributes = new { @class = "createButton" } })</td>*@
                 @*<td scope="row">@Html.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, null)</td>*@
-                <td scope="row">@Ajax.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId="authorList", HttpMethod = "POST" })</td>
+                @*<td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "GET" }, new { htmlAttributes = new { @class = "createButton" } })</td>*@
+                <td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "GET" }, new { htmlAttributes = new { @data-toggle = "modal" } })</td>
+                <td scope="row">@Ajax.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "POST" })</td>
             </tr>
         }
 </table>

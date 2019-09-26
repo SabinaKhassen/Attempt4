@@ -105,13 +105,13 @@ namespace Attempt4.Controllers
                 authorBO.Save();
             var authors = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
 
-            if (Request.IsAjaxRequest())
-            {
+            //if (Request.IsAjaxRequest())
+            //{
 
                 return PartialView("Partial/AuthorPartialView", authors.Select(m => mapper.Map<AuthorViewModel>(m)).ToList());
-            }
+            //}
 
-            return RedirectToActionPermanent("Index", "Author");
+            //return RedirectToActionPermanent("Index", "Author");
             //}
             //else return View(model);
         }

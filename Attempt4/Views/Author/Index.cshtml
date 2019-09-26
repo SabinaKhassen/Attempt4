@@ -12,14 +12,11 @@
     <a id="link" onclick="EditView()">Create author</a>
 </p>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">Create author</button>
+<button type="button" class="createButton btn btn-primary" @*data-toggle="modal" data-target=".bd-example-modal-sm"*@>Create author</button>
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">Small modal</button>*@
 
-<div id="modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div id="createOrEdit" class="modal-content">
-            @Html.Partial("Partial/EditPartialView", new Attempt4.ViewModels.AuthorViewModel())
-        </div>
-    </div>
+<div id="createOrEdit">
+    @Html.Partial("Partial/EditPartialView", new Attempt4.ViewModels.AuthorViewModel())
 </div>
 
 <div id="authorList">
@@ -27,6 +24,7 @@
 </div>
 
 <a onclick="Refresh()">Refresh</a>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
     function Refresh() {
         $.ajax({
@@ -48,7 +46,7 @@
         })
     }
 
-    function SaveEdit() {
+    @*function SaveEdit() {
         console.log("save edit")
         var id = $("#Id").val();
         var firstName = $("#FirstName").val();
@@ -63,9 +61,34 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                $('#modal').modal('hide');
                 $("#authorList").html(data);
+                $('#modal').modal("hide");
             }
         })
-    }
+    }*@
+
+
+
+    $(".createButton").click(() => {
+        $.ajax({
+            url: '@Url.Action("Edit")',
+            method: 'GET',
+            success: function (data) {
+                $("#createOrEdit").html(data);
+                $("#modal").modal("show");
+            }
+        })
+    })
+
+    @*$(".editButton").click(() => {
+        $.ajax({
+            url: '@Url.Action("Edit")',
+            method: 'GET',
+            data: {id: }
+            success: function (data) {
+                $("#createOrEdit").html(data);
+                $("#modal").modal("show");
+            }
+        })
+    })*@
 </script>
