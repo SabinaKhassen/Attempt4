@@ -31,6 +31,11 @@ namespace Attempt4.Controllers
             ViewBag.Authors = authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
             ViewBag.Genres = genreList.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
 
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Partial/BookPartialView", ViewBag.Books);
+            }
+
             return View();
         }
 
@@ -38,8 +43,8 @@ namespace Attempt4.Controllers
         public ActionResult Edit(int? id)
         {
             var bookBO = DependencyResolver.Current.GetService<BookBO>();
-            var authors = DependencyResolver.Current.GetService<AuthorBO>();
-            var genres = DependencyResolver.Current.GetService<GenreBO>();
+            //var authors = DependencyResolver.Current.GetService<AuthorBO>();
+            //var genres = DependencyResolver.Current.GetService<GenreBO>();
             var model = mapper.Map<BookViewModel>(bookBO);
 
             if (id != null)
@@ -50,15 +55,20 @@ namespace Attempt4.Controllers
             }
             else ViewBag.Message = "Create";
 
-            ViewBag.Authors = new SelectList(authors.GetAuthorsList().Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "Id", "LastName");
+            //ViewBag.AuthorsSelectList = new SelectList(authors.GetAuthorsList().Select(m => mapper.Map<AuthorViewModel>(m)).ToList(), "Id", "LastName");
             //ViewBag.Genres = new SelectList(genres.GetGenresList().Select(m => mapper.Map<GenreViewModel>(m)).ToList(), "Id", "Name");
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Partial/EditPartialView", model);
+            }
 
             return View(model);
         }
 
         // POST: Book/Edit/5
         [HttpPost]
-        public ActionResult Edit(BookViewModel model, HttpPostedFileBase upload, int genre)
+        public ActionResult Edit(BookViewModel model, HttpPostedFileBase upload, int genre, int author)
         {
             string str = "test";
             var bookBO = mapper.Map<BookBO>(model);
@@ -79,17 +89,35 @@ namespace Attempt4.Controllers
                 bookBO.ImageData = new byte[str.Length];
             }
             bookBO.GenreId = genre;
-
+            bookBO.AuthorId = author;
             bookBO.Save();
 
-            return RedirectToActionPermanent("Index", "Book");
+            var books = DependencyResolver.Current.GetService<BookBO>().GetBooksList();
+
+            var authorList = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+            var genreList = DependencyResolver.Current.GetService<GenreBO>().GetGenresList();
+            ViewBag.Authors = authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+            ViewBag.Genres = genreList.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
+
+            return PartialView("Partial/BookPartialView", books.Select(m => mapper.Map<BookViewModel>(m)).ToList());
         }
 
         // GET: Book/Delete/5
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             var book = DependencyResolver.Current.GetService<BookBO>().GetBooksListById(id);
             book.Delete(id);
+            var bookBO = DependencyResolver.Current.GetService<BookBO>().GetBooksList();
+            if (Request.IsAjaxRequest())
+            {
+                var authorList = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+                var genreList = DependencyResolver.Current.GetService<GenreBO>().GetGenresList();
+                ViewBag.Authors = authorList.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+                ViewBag.Genres = genreList.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
+
+                return PartialView("Partial/BookPartialView", bookBO.Select(m => mapper.Map<AuthorViewModel>(m)).ToList());
+            }
 
             return RedirectToActionPermanent("Index", "Book");
         }
@@ -100,6 +128,14 @@ namespace Attempt4.Controllers
             var genreBO = DependencyResolver.Current.GetService<GenreBO>().GetGenresList();
             var genreList = genreBO.Select(m => mapper.Map<GenreViewModel>(m)).ToList();
             return Json(genreList.Select(g => new { g.Id, g.Name }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult AuthorDropDown()
+        {
+            var authorBO = DependencyResolver.Current.GetService<AuthorBO>().GetAuthorsList();
+            var authorList = authorBO.Select(m => mapper.Map<AuthorViewModel>(m)).ToList();
+            return Json(authorList.Select(g => new { g.Id, g.LastName }).ToList(), JsonRequestBehavior.AllowGet);
         }
     }
 }

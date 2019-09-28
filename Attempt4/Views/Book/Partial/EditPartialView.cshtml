@@ -1,0 +1,111 @@
+﻿@model Attempt4.ViewModels.BookViewModel
+
+<div id="modal" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            @using (Ajax.BeginForm("Edit", new AjaxOptions() { UpdateTargetId = "bookList" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>BookViewModel</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AuthorId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <select id="authorList" name="author" class="form-control"></select>
+                            @Html.ValidationMessageFor(model => model.AuthorId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Pages, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Pages, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Pages, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GenreId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <select id="genreList" name="genre" class="form-control"></select>
+                            @Html.ValidationMessageFor(model => model.GenreId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ImageData, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.EditorFor(model => model.ImageData, new { htmlAttributes = new { @class = "form-control", type = "file" } })*@
+                            <input type="file" name="upload" /><br>
+                            @Html.ValidationMessageFor(model => model.ImageData, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            @*<input type="submit" value="Save" class="btn btn-default" />*@
+                            <button id="save" type="submit" class="btn btn-default">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    $.ajax({
+        url: '@Url.Action("GenreDropDown")',
+        type: 'GET',
+        data: {
+            //genre: $("#genreList").val()
+        },
+        success: function (data) {
+            var s = '';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].Name + '</option>';
+            }
+            $("#genreList").html(s);
+        }
+    })
+
+    $.ajax({
+        url: '@Url.Action("AuthorDropDown")',
+        type: 'GET',
+        data: {},
+        success: function (data) {
+            console.log(data)
+            console.log(data.length)
+            //console.log(data[0].Id + " " + data[0].Fio)
+            var s = '';
+            for (var i = 0; i < data.length; i++) {
+                s += '<option value="' + data[i].Id + '">' + data[i].LastName + '</option>';
+            }
+            $("#authorList").html(s);
+        }
+    })
+</script>

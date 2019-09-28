@@ -16,8 +16,9 @@
                 @*<td scope="row">@Html.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }@*, new AjaxOptions() { UpdateTargetId = "createOrEdit" }, new { htmlAttributes = new { @class = "createButton" } })</td>*@
                 @*<td scope="row">@Html.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, null)</td>*@
                 @*<td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "GET" }, new { htmlAttributes = new { @class = "createButton" } })</td>*@
-                <td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "GET" }, new { htmlAttributes = new { @data-toggle = "modal" } })</td>
-                <td scope="row">@Ajax.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "POST" })</td>
+                @*<td scope="row">@Ajax.ActionLink("Edit author", "Edit", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "authorList", HttpMethod = "GET" }, new { htmlAttributes = new { onclick= "EditButton(@item.Id)"@*data_toggle = "modal", data_target = "#modal" } })</td>*@
+                <td scope="row"><a onclick="EditButton(@item.Id)">Edit author</td>
+                <td scope="row">@Ajax.ActionLink("Delete author", "Delete", "Author", new { id = @item.Id }, new AjaxOptions() { UpdateTargetId = "list", HttpMethod = "POST" })</td>
             </tr>
         }
 </table>

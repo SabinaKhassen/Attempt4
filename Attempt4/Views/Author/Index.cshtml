@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Index";
+    List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
 }
 
 @*@Html.ActionLink("Create author", "Edit")*@
@@ -8,9 +9,9 @@
 
 <h2>Authors</h2>
 
-<p>
-    <a id="link" onclick="EditView()">Create author</a>
-</p>
+@*<p>
+        <a id="link" onclick="EditView()">Create author</a>
+    </p>*@
 
 <button type="button" class="createButton btn btn-primary" @*data-toggle="modal" data-target=".bd-example-modal-sm"*@>Create author</button>
 @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">Small modal</button>*@
@@ -19,35 +20,36 @@
     @Html.Partial("Partial/EditPartialView", new Attempt4.ViewModels.AuthorViewModel())
 </div>
 
-<div id="authorList">
-    @Html.Partial("Partial/AuthorPartialView", ViewBag.Authors as List<Attempt4.ViewModels.AuthorViewModel>)
+<div id="list">
+    @Html.Partial("Partial/AuthorPartialView", authors)
 </div>
 
 <a onclick="Refresh()">Refresh</a>
+@*<script src="~/Scripts/CreateEditPartial.js"></script>*@
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
-    function Refresh() {
-        $.ajax({
-            url: '@Url.Action("Index")',
-            method: "GET",
-            success: function (data) {
-                $("#authorList").html(data);
-            }
-        });
-    }
+        function Refresh() {
+            $.ajax({
+                url: '@Url.Action("Index")',
+                method: "GET",
+                success: function (data) {
+                    $("#list").html(data);
+                }
+            })
+        }
 
     function EditView() {
-        $.ajax({
-            url: '@Url.Action("Edit")',
-            method: 'GET',
-            success: function (data) {
-                $("#createOrEdit").html(data);
-            }
-        })
-    }
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                method: 'GET',
+                success: function (data) {
+                    $("#createOrEdit").html(data);
+                }
+            })
+        }
 
-    @*function SaveEdit() {
-        console.log("save edit")
+        @*function SaveEdit() {
+            console.log("save edit")
         var id = $("#Id").val();
         var firstName = $("#FirstName").val();
         var lastName = $("#LastName").val();
@@ -56,39 +58,40 @@
         console.log(lastName)
         $.ajax({
             url: '@Url.Action("Edit")',
-            method: 'POST',
-            data: JSON.stringify({ Id: id, FirstName: firstName, LastName: lastName }),
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
+        method: 'POST',
+            data: JSON.stringify({Id: id, FirstName: firstName, LastName: lastName }),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
             success: function (data) {
-                $("#authorList").html(data);
-                $('#modal').modal("hide");
-            }
-        })
-    }*@
+            $("#list").html(data);
+        $('#modal').modal("hide");
+    }
+})
+}*@
 
 
 
     $(".createButton").click(() => {
-        $.ajax({
-            url: '@Url.Action("Edit")',
-            method: 'GET',
-            success: function (data) {
-                $("#createOrEdit").html(data);
-                $("#modal").modal("show");
-            }
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                method: 'GET',
+                success: function (data) {
+                    $("#createOrEdit").html(data);
+                    $("#modal").modal("show");
+                }
+            })
         })
-    })
 
-    @*$(".editButton").click(() => {
+    function EditButton (idEdit) {
+            console.log(idEdit)
         $.ajax({
             url: '@Url.Action("Edit")',
-            method: 'GET',
-            data: {id: }
+        method: 'GET',
+            data: {id: idEdit},
             success: function (data) {
                 $("#createOrEdit").html(data);
                 $("#modal").modal("show");
             }
         })
-    })*@
+    }
 </script>

@@ -21,7 +21,8 @@
             @Html.LabelFor(model => model.AuthorId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.AuthorId, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(model => model.AuthorId, ViewBag.Authors as SelectList, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.DropDownListFor(model => model.AuthorId, ViewBag.Authors as SelectList, new { htmlAttributes = new { @class = "form-control" } })*@
+                <select id="authorList" class="form-control" name="author"></select>
                 @Html.ValidationMessageFor(model => model.AuthorId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -95,6 +96,19 @@
                 s += '<option value="' + data[i].Id + '">' + data[i].Name + '</option>';
             }
             $("#genreList").html(s);
+        }
+    })
+
+    $.ajax({
+        url: '@Url.Action("AuthorDropDown")',
+        type: 'GET',
+        data: {},
+        success: function (data) {
+            var s = '';
+            for (var i = 0; i < data.length; i++) {
+                s += 'option value="' + data[i].Id + '">' + data[i].Fio + '</option>';
+            }
+            $("#authorList").html(s);
         }
     })
 </script>

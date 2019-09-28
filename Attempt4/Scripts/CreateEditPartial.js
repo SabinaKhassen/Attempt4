@@ -1,37 +1,15 @@
-﻿@{
-    ViewBag.Title = "Index";
-    List<Attempt4.ViewModels.AuthorViewModel> authors = ViewBag.Authors;
-    List<Attempt4.ViewModels.GenreViewModel> genres = ViewBag.Genres;
-}
-
-@*@Html.ActionLink("Create book", "Edit")*@
-
-<h2>Books</h2>
-
-<button type="button" class="createButton btn btn-primary">Create book</button>
-
-<div id="createOrEdit">
-    @Html.Partial("Partial/EditPartialView", new Attempt4.ViewModels.BookViewModel())
-</div>
-
-<div id="bookList">
-    @Html.Partial("Partial/BookPartialView", ViewBag.Books as List<Attempt4.ViewModels.BookViewModel>, new ViewDataDictionary { { "authors", authors }, { "genres", genres } })
-</div>
-
-<a onclick="Refresh()">Refresh</a>
-@*<script src="~/Scripts/CreateEditPartial.js"></script>*@
-<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script type="text/javascript">
+﻿<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
         function Refresh() {
             $.ajax({
                 url: '@Url.Action("Index")',
                 method: "GET",
                 success: function (data) {
-                    $("#bookList").html(data);
+                    $("#list").html(data);
                 }
             })
         }
-
+    
     function EditView() {
             $.ajax({
                 url: '@Url.Action("Edit")',
@@ -41,6 +19,29 @@
                 }
             })
         }
+
+//        function SaveEdit() {
+//            console.log("save edit")
+//        var id = $("#Id").val();
+//        var firstName = $("#FirstName").val();
+//        var lastName = $("#LastName").val();
+//        console.log(id)
+//        console.log(firstName)
+//        console.log(lastName)
+//        $.ajax({
+//            url: '@Url.Action("Edit")',
+//        method: 'POST',
+//            data: JSON.stringify({Id: id, FirstName: firstName, LastName: lastName }),
+//        dataType: 'json',
+//        contentType: 'application/json; charset=utf-8',
+//            success: function (data) {
+//            $("#list").html(data);
+//        $('#modal').modal("hide");
+//    }
+//})
+}
+
+
 
     $(".createButton").click(() => {
             $.ajax({
@@ -52,7 +53,7 @@
                 }
             })
         })
-
+    
     function EditButton (idEdit) {
             console.log(idEdit)
         $.ajax({
