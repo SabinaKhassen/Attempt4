@@ -67,6 +67,8 @@ namespace Attempt4.Controllers
             }
             else ViewBag.Message = "Create";
 
+            model.ReturnDate = null;
+
             ViewBag.Users = new SelectList(userBO.GetUsersList().Select(m => mapper.Map<UserViewModel>(m)).ToList(), "Id", "FIO");
             ViewBag.Books = new SelectList(bookBO.GetBooksList().Select(m => mapper.Map<BookViewModel>(m)).ToList(), "Id", "Title");
 
@@ -81,11 +83,11 @@ namespace Attempt4.Controllers
             if (model.Id == 0)
             {
                 var allow = orderBO.GetOrdersList().Select(m => mapper.Map<OrderViewModel>(m)).Where(o => o.UserId == model.UserId).ToList();
-                var list = allow.Where(a => a.Deadline < DateTime.Today && a.CreationDate == a.ReturnDate).ToList();
+                var list = allow.Where(a => a.Deadline < DateTime.Now && a.CreationDate == a.ReturnDate).ToList();
 
                 if (list.Count == 0)
                 {
-                    orderBO.CreationDate = DateTime.Today;
+                    orderBO.CreationDate = DateTime.Now;
                     if (model.ReturnDate == null) orderBO.ReturnDate = orderBO.CreationDate;
                     orderBO.Save();
                 }

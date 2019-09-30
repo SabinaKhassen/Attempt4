@@ -25,12 +25,13 @@ namespace DataLayer.Entities
         public virtual Books Books { get; set; }
 
         [Required]
+        [DataType(DataType.DateTime)]
         public DateTime CreationDate { get; set; }
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime Deadline { get; set; }
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime? ReturnDate { get; set; }
     }
 }
